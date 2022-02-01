@@ -44,7 +44,7 @@ class ParseException extends InvalidArgumentException
     {
         
         $msg = 'Expected operator %s, found %s!';
-        throw new self(sprintf($msg, implode('|', $allowedOperators), $value));
+        throw new self(sprintf($msg, implode(',', $allowedOperators), $value));
     }
         
     
