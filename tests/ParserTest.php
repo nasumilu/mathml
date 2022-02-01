@@ -20,6 +20,7 @@ namespace Nasumilu\MathML\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Nasumilu\MathML\Parser;
+use Nasumilu\MathML\ParseException;
 
 /**
  * Description of Parser
@@ -31,12 +32,55 @@ class ParserTest extends TestCase
 
     /**
      * @test
+     * @return void
      */
-    public function add()
+    public function add(): void
     {
-        echo Parser::calculateFromFile(__DIR__.'/Resources/add.xml');
-        
-        
+        $this->assertEquals(1.56, Parser::calculateFromFile(__DIR__ . '/Resources/valid.xml'));
     }
-    
+
+    /**
+     * @test
+     * @return void
+     */
+    public function nonNumericValue(): void
+    {
+        $this->expectException(ParseException::class);
+        $xml = "<math><mrow><mn>1</mn><mo>+</mo><mn>t</mn></mrow></math>";
+        Parser::calculate($xml);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function invalidOperator(): void
+    {
+        $this->expectException(ParseException::class);
+        $xml = "<math><mrow><mn>1</mn><mo>^</mo><mn>t</mn></mrow></math>";
+        Parser::calculate($xml);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function unexpectedNodeMRow(): void
+    {
+        $this->expectException(ParseException::class);
+        $xml = "<math><mn>1</mn><mo>+</mo><mn>t</mn></math>";
+        Parser::calculate($xml);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function unexpectedNodeNotMnOrMo(): void
+    {
+        $this->expectException(ParseException::class);
+        $xml = "<math><mrow><mn>1</mn><mo>+</mo><mi>i</mi></mrow></math>";
+        Parser::calculate($xml);
+    }
+
 }

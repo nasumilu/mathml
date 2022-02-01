@@ -45,8 +45,13 @@ class Parser
         if (is_string($xml)) {
             $xml = new SimpleXMLElement($xml);
         }
-
-        return static::calculateResults($xml->mrow);
+        
+        $mrow = $xml->mrow;
+        if(empty($mrow)) {
+            throw ParseException::unexpectedNode('mrow of mo and mn', 'none');
+        }
+        
+        return static::calculateResults($mrow);
     }
 
     private static function calculateResults(SimpleXMLElement $node): int|float
@@ -65,17 +70,11 @@ class Parser
         $value = (string) $node;
 
         if ($name !== 'mo' && $name !== 'mn') {
-            throw new InvalidArgumentException("Expected either mn or mo, "
-                            . "found $name!");
+            throw ParseException::unexpectedNode('mo or mn', $name);
         } else if ('mn' === $name && !is_numeric($value)) {
-            throw new InvalidArgumentException("Expected a numeric value, "
-                            . "found $value!");
+            throw ParseException::notNumericValue($value);
         } else if ('mo' === $name && !in_array($value, static::OPERATORS)) {
-            throw new InvalidArgumentException(
-                            vsprintf('Expected operator `%s`, `%s`, `%s`, '
-                                    . '`%s`, `%s`, `%s`,`%s`, or `%s`, found'
-                                    . ' `%s`!',
-                                    array_merge(static::OPERATORS, [$value])));
+            throw ParseException::notValidOperator($value, ...static::OPERATORS);
         }
 
         if ('÷' === $value) {
