@@ -42,10 +42,9 @@ class ParseException extends InvalidArgumentException
     
     public static function notValidOperator(string $value, string ...$allowedOperators): self
     {
-        $msg = 'Expected operator %s, or %s, found %s!';
-        $length = count($allowedOperators);
-        throw new self(vsprintf($msg, array_merge(array_slice($allowedOperators, 0, $length - 2), 
-                [$allowedOperators[$length - 1]], [$value])));
+        
+        $msg = 'Expected operator '. str_repeat('%s |', count($allowedOperators)) . ', found %s!';
+        throw new self(vsprintf($msg, array_merge($allowedOperators, [$value])));
     }
         
     
