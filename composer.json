@@ -1,0 +1,23 @@
+{
+    "name": "nasumilu/mathml",
+    "description": "Simple library used to perform .",
+    "authors": [
+        {
+            "name": "Michael Lucas",
+            "email": "nasumilu@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Nasumilu\\MathML\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Nasumilu\\MathML\\Tests\\": "test/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    }
+}
