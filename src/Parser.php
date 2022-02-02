@@ -28,7 +28,7 @@ use InvalidArgumentException;
 class Parser
 {
 
-    private const OPERATORS = ['(', ')', '/', '÷', '*', '×', '-', '+'];
+    private const OPERATORS = ['(', ')', '/', '÷', '*', '×', '-', '+', '.'];
 
     private function __construct()
     {
